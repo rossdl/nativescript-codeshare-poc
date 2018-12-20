@@ -1,5 +1,12 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<ActionBar [title]="title"></ActionBar>
-<StackLayout  class="p-20">
-    <Label text="Welcome to {{ title }}!" class="h1 text-center" textWrap="true"></Label>
-</StackLayout>
+<ActionBar class="action-bar">
+    <Label class="action-bar-title" text="Events"></Label>
+    <ActionItem android.systemIcon="ic_menu_refresh" android.position="actionBar" (tap)="onRefresh($event)"></ActionItem>
+</ActionBar>
+
+<GridLayout class="page page-content">
+    <ListView [items]="items" class="list-group">
+        <ng-template let-item="item">
+            <Label [nsRouterLink]="['../item', item.EventID]" [text]="item.EventDesc" class="list-group-item"></Label>
+        </ng-template>
+    </ListView>
+</GridLayout>

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { EventService } from '../core/event-service/EventService';
+import { ParkingEvent } from '../core/event-service/EventModels';
 
 @Component({
   selector: 'app-home',
@@ -6,10 +8,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
-  title = 'AmiSharedApp';
+  items: Array<ParkingEvent>;
 
-  constructor() { }
+  constructor(private eventService: EventService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.loadEvents();
+  }
+
+  onRefresh(args: any): void {
+    this.loadEvents();
+  }
+
+  private loadEvents(): void {
+    this.eventService.getEvents().then(events => {
+      this.items = events
+    });
   }
 }

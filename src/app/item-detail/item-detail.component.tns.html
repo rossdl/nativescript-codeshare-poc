@@ -1,0 +1,12 @@
+<ActionBar class="action-bar">
+    <NavigationButton [nsRouterLink]="['../../home']" android.systemIcon="ic_menu_back"></NavigationButton>
+    <Label class="action-bar-title" [text]="item?.EventDesc"></Label>
+</ActionBar>
+
+<GridLayout>
+    <ListView [items]="rates" class="list-group">
+        <ng-template let-rate="item">
+            <Label text="{{rate.RateName}} ${{rate.Fee}}" class="list-group-item"></Label>
+        </ng-template>
+    </ListView>
+</GridLayout>
