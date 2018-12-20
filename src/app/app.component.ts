@@ -6,4 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+
+  getIconSource(icon: string): string {
+    //const iconPrefix = isAndroid ? "res://" : "res://tabIcons/";
+    const iconPrefix = "res://";
+    return iconPrefix + icon;
+  }
 }

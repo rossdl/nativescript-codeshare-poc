@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { EventService } from './core/event-service/EventService';
 import { ItemDetailComponent } from './item-detail/item-detail.component';
+import { BrowseComponent } from './browse/browse.component';
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
   declarations: [
