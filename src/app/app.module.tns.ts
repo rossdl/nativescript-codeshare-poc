@@ -11,13 +11,11 @@ import { EventService } from './core/event-service/EventService';
 import { ItemDetailComponent } from './item-detail/item-detail.component';
 import { BrowseComponent } from './browse/browse.component';
 import { SearchComponent } from './search/search.component';
+import { BluetoothService } from './core/bluetooth/BluetoothService';
 
 
 // Uncomment and add to NgModule imports if you need to use two-way binding
 // import { NativeScriptFormsModule } from 'nativescript-angular/forms';
-
-// Uncomment and add to NgModule imports  if you need to use the HTTP wrapper
-// import { NativeScriptHttpClientModule } from 'nativescript-angular/http-client';
 
 @NgModule({
   declarations: [
@@ -34,6 +32,7 @@ import { SearchComponent } from './search/search.component';
   ],
   providers: [
     BarcodeScanner,
+    BluetoothService,
     EventService
   ],
   bootstrap: [AppComponent],

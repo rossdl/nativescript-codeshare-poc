@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
 import { Observable, Subscription } from "rxjs";
 import { distinctUntilChanged } from 'rxjs/operators';
+import { BluetoothService } from '../core/bluetooth/BluetoothService';
+import * as bluetooth from 'nativescript-bluetooth';
 
 @Component({
   selector: 'app-browse',
@@ -17,79 +18,74 @@ export class BrowseComponent implements OnInit {
 
   devices: any[];
 
-  //constructor(private router: Router, private bluetoothService: BluetoothService) {
-  constructor() {
-      //bluetooth.setCharacteristicLogging(false);
-  }
+  constructor(private bluetoothService: BluetoothService) { }
 
   ngOnInit() {
-      //bluetooth.requestCoarseLocationPermission();
+      this.isEnabledSubscription = this.listenToBluetoothEnabled()
+          .pipe(distinctUntilChanged())
+          .subscribe(enabled => this.isBluetoothEnabled = enabled);
 
-      // this.isEnabledSubscription = this.listenToBluetoothEnabled()
-      //     .pipe(distinctUntilChanged())
-      //     .subscribe(enabled => this.isBluetoothEnabled = enabled);
-
-      //this.bluetoothService.start();
+      this.bluetoothService.start();
   }
 
-  // ngOnDestroy(): void {
-  //     this.isEnabledSubscription.unsubscribe();
-  //     this.bluetoothService.stop();
-  // }
+  ngOnDestroy(): void {
+      this.isEnabledSubscription.unsubscribe();
+      this.bluetoothService.stop();
+  }
 
-  // public listenToBluetoothEnabled(): Observable<boolean> {
-  //     return new Observable(observer => {
-  //         bluetooth.isBluetoothEnabled()
-  //             .then(enabled => observer.next(enabled))
+  public listenToBluetoothEnabled(): Observable<boolean> {
+      return new Observable(observer => {
+          bluetooth.isBluetoothEnabled()
+              .then(enabled => observer.next(enabled))
 
-  //         let intervalHandle = setInterval(
-  //             () => {
-  //                 bluetooth.isBluetoothEnabled()
-  //                     .then(enabled => observer.next(enabled))
-  //             }
-  //             , 1000);
+          let intervalHandle = setInterval(
+              () => {
+                  bluetooth.isBluetoothEnabled()
+                      .then(enabled => observer.next(enabled))
+              }
+              , 1000);
 
-  //         // stop checking every second on unsubscribe
-  //         return () => clearInterval(intervalHandle);
-  //     });
-  // }
+          // stop checking every second on unsubscribe
+          return () => clearInterval(intervalHandle);
+      });
+  }
 
   addDevice(name: string, UUID: string) {
       this.devices.push({ name, UUID });
   }
 
   listDevices() {
-      // try {
-      //     let pairedDevices = this.bluetoothService.getPairedDevices();
-      //     pairedDevices.forEach(dev => {
-      //         console.log(dev.Address);
-      //         let uuid: string = dev.Name.toLowerCase().includes('gate') ? this.cmdGate : this.cmdPrint; //PoC
-      //         this.addDevice(dev.Name, uuid);
-      //     });
-      // }
-      // catch (e) {
-      //     console.log(e);
-      // }
+      try {
+          let pairedDevices = this.bluetoothService.getPairedDevices();
+          pairedDevices.forEach(dev => {
+              console.log(dev.Address);
+              let uuid: string = dev.Name.toLowerCase().includes('gate') ? this.cmdGate : this.cmdPrint; //PoC
+              this.addDevice(dev.Name, uuid);
+          });
+      }
+      catch (e) {
+          console.log(e);
+      }
   }
 
   send(name: string, peripheral: string) {
       // PoC of course
-      // try {
-      //     this.bluetoothService.connect(name);
-      //     if (!this.bluetoothService.isConnected()) {
-      //         return;
-      //     }
+      try {
+          this.bluetoothService.connect(name);
+          if (!this.bluetoothService.isConnected()) {
+              return;
+          }
 
-      //     let message = peripheral === this.cmdGate
-      //         ? this.vendGateMessage()
-      //         : this.printMessage();
+          let message = peripheral === this.cmdGate
+              ? this.vendGateMessage()
+              : this.printMessage();
 
-      //     console.log('send message', message);
-      //     this.bluetoothService.send(message);
-      // }
-      // catch (e) {
-      //     console.log(e);
-      // }
+          console.log('send message', message);
+          this.bluetoothService.send(message);
+      }
+      catch (e) {
+          console.log(e);
+      }
   }
 
   printMessage(): string {
