@@ -57,6 +57,7 @@
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "nativescript-dev-sass": "^1.6.0",
     "nativescript-dev-webpack": "^0.17.0",
     "protractor": "~5.4.0",
     "tns-platform-declarations": "^5.1.1",

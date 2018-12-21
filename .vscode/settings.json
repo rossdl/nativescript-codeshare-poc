@@ -1,6 +1,7 @@
 {
     "files.exclude": {
-        "**/*.js": { "when": "$(basename).ts" }
+        "**/*.js": { "when": "$(basename).ts" },
+        "**/*.css": { "when": "$(basename).scss" },
     },
     "workbench.colorCustomizations": {
         "activityBar.background": "#271db4"
