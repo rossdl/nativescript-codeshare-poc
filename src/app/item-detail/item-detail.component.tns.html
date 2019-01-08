@@ -6,7 +6,7 @@
 <GridLayout>
     <ListView [items]="rates" class="list-group">
         <ng-template let-rate="item">
-            <Label text="{{rate.RateName}} ${{rate.Fee}}" class="list-group-item"></Label>
+            <Label text="{{rate.lot}} {{rate.name}} ${{rate.fee}}" class="list-group-item"></Label>
         </ng-template>
     </ListView>
 </GridLayout>

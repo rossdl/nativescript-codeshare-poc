@@ -24,3 +24,15 @@ export class SiteRate {
     Fee: number;
     RateName: string;
 }
+
+export class EventLot {
+    EventID: string;
+    LotID: number;
+    Barcode: string;
+}
+
+export class SiteLot {
+    LotID: number;
+    LotDesc: string;
+    SiteGUID: string;
+}

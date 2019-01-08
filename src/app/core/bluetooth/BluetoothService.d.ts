@@ -1,10 +1,9 @@
 import { BluetoothDevice } from "./BluetoothDevice";
 
 export declare class BluetoothService {
-    isConnected(): boolean;
-    start(): void;
-    stop(): void;
+    isConnected(name: string): boolean;
     getPairedDevices(): BluetoothDevice[];
     connect(name: string): void;
-    send(message: string): void;
+    disconnect(name: string): void;
+    send(name: string, message: string): void;
 }

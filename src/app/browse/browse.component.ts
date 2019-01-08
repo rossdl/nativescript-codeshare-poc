@@ -24,13 +24,10 @@ export class BrowseComponent implements OnInit {
       this.isEnabledSubscription = this.listenToBluetoothEnabled()
           .pipe(distinctUntilChanged())
           .subscribe(enabled => this.isBluetoothEnabled = enabled);
-
-      this.bluetoothService.start();
   }
 
   ngOnDestroy(): void {
       this.isEnabledSubscription.unsubscribe();
-      this.bluetoothService.stop();
   }
 
   public listenToBluetoothEnabled(): Observable<boolean> {
@@ -59,7 +56,7 @@ export class BrowseComponent implements OnInit {
           let pairedDevices = this.bluetoothService.getPairedDevices();
           pairedDevices.forEach(dev => {
               console.log(dev.Address);
-              let uuid: string = dev.Name.toLowerCase().includes('gate') ? this.cmdGate : this.cmdPrint; //PoC
+              let uuid: string = dev.Name.toLowerCase().includes(this.cmdGate) ? this.cmdGate : this.cmdPrint; //PoC
               this.addDevice(dev.Name, uuid);
           });
       }
@@ -72,7 +69,7 @@ export class BrowseComponent implements OnInit {
       // PoC of course
       try {
           this.bluetoothService.connect(name);
-          if (!this.bluetoothService.isConnected()) {
+          if (!this.bluetoothService.isConnected(name)) {
               return;
           }
 
@@ -81,7 +78,7 @@ export class BrowseComponent implements OnInit {
               : this.printMessage();
 
           console.log('send message', message);
-          this.bluetoothService.send(message);
+          this.bluetoothService.send(name, message);
       }
       catch (e) {
           console.log(e);

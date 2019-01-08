@@ -2,7 +2,7 @@
 <h3>{{ item?.EventDesc }}</h3>
 <ul class="items">
   <li *ngFor="let rate of rates">
-    <span class="badge">${{rate.Fee}}</span> {{rate.RateName}}
+    <span class="badge">${{rate.fee}}</span>{{rate.lot}}: {{rate.name}} 
   </li>
 </ul>
 <button [routerLink]="['/home']">back</button>

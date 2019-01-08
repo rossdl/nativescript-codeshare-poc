@@ -6,8 +6,7 @@ declare let me: any;
 
 @Injectable()
 export class BluetoothService {
-    private bluetooth: any;
-    private connectedName: string = null;
+    private bluetooth: any[] = [];
 
     private readonly className: string = this.constructor.name;
 
@@ -15,18 +14,23 @@ export class BluetoothService {
         console.log('hey', this.className);
     }
 
-    isConnected(): boolean {
-        return this.bluetooth.isConnected();
+    isConnected(name: string): boolean {
+        const bt = this.get(name);
+        return bt && bt.isConnected();
     }
 
-    start() {
+    private start(name: string) {
         try {
             console.log('startBluetooth');
 
             if (me.aflak.bluetooth.Bluetooth) {
-                this.bluetooth = new me.aflak.bluetooth.Bluetooth(app.android.context);
-                this.bluetooth.onStart();
-                this.bluetooth.enable();
+                if (!this.has(name)) {
+                    this.bluetooth.push({ name: name, device: new me.aflak.bluetooth.Bluetooth(app.android.context) });
+                }
+                console.log('this.bluetooth', this.bluetooth);
+                const bt = this.get(name);
+                bt.onStart();
+                bt.enable();
             }
         }
         catch (e) {
@@ -34,12 +38,13 @@ export class BluetoothService {
         }
     }
 
-    stop() {
+    private stop(name: string) {
         try {
             console.log('stopBluetooth');
 
-            if (this.bluetooth) {
-                this.bluetooth.onStop();
+            if (this.has(name)) {
+                const bt = this.get(name);
+                bt.onStop();
             }
         }
         catch (e) {
@@ -48,16 +53,18 @@ export class BluetoothService {
     }
 
     getPairedDevices(): BluetoothDevice[] {
-        if (!this.bluetooth) {
-            return new Array<BluetoothDevice>();
-        }
+        const bt = new me.aflak.bluetooth.Bluetooth(app.android.context);
+        bt.onStart();
+        bt.enable();
 
         let devices = new Array<BluetoothDevice>();
-        let pairedDevices = this.bluetooth.getPairedDevices() as java.util.List<android.bluetooth.BluetoothDevice>;
+        let pairedDevices = bt.getPairedDevices() as java.util.List<android.bluetooth.BluetoothDevice>;
         for (let i = 0; i < pairedDevices.size(); i++) {
             let dev = pairedDevices.get(i);
             devices.push(new BluetoothDevice(dev.getName(), dev.getAddress()));
         }
+
+        //bt.onStop();
 
         return devices;
     }       
@@ -65,46 +72,61 @@ export class BluetoothService {
     connect(name: string) {
         // PoC of course
         try {
-            if (this.connectedName !== name) {
-                if (this.isConnected()) {
-                    console.log(`Disconnect from ${this.connectedName}`);
-                    this.bluetooth.disconnect();
-                }
+            if (!this.has(name)) {
+                console.log(`add name ${name}`);
+                this.start(name);
+            }
 
+            if (!this.isConnected(name)) {
                 console.log(`Connect to ${name}`);
-                this.bluetooth.connectToName(name, true);
+                this.get(name).connectToName(name, true);
             }
 
             let attempt = 0;
-            while (!this.bluetooth.isConnected() && attempt < 20) {
+            while (!this.isConnected(name) && attempt < 10) {
                 this.sleep(500);
                 attempt++;
             }
 
-            if (!this.bluetooth.isConnected()) {
+            if (!this.isConnected(name)) {
                 console.log('can\'t connect, try again');
-                this.reset();
+                this.reset(name);
                 return;
             }
-
-            this.connectedName = name;
         }
         catch (e) {
             this.logError("connect", e);
         }
     }
 
-    send(message: string): void {
-        this.bluetooth.send(message, null);
+    disconnect(name: string) {
+        this.stop(name);
+        this.get(name).disconnect();
+        //TODO remove from array?
     }
 
-    private reset() {
+    send(name: string, message: string): void {
+        this.get(name).send(message, null);
+    }
+
+    // no idea if this is truly necessary yet
+    private reset(name: string) {
         console.log('reset');
-        this.bluetooth.onStop();
+        this.stop(name);
         this.sleep(500);
-        this.bluetooth.onStart();
-        this.sleep(500);
-        this.bluetooth.enable();
+        this.start(name);
+    }
+
+    private has(name: string): boolean {
+        return this.bluetooth.some(b => b.name === name);
+    }
+
+    private get(name: string): any {
+        const device = this.has(name)
+            ? this.bluetooth.find(b => b.name === name).device
+            : null;
+        console.log('get', name, device);
+        return device;
     }
 
     private sleep(ms: number): void {
