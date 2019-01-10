@@ -1,6 +1,8 @@
-import { BluetoothDevice } from "./BluetoothDevice";
+import { BluetoothDevice, BluetoothEvent } from "./BluetoothDevice";
+import { Subject } from "rxjs";
 
 export declare class BluetoothService {
+    onEvent$: Subject<BluetoothEvent>;
     isConnected(name: string): boolean;
     getPairedDevices(): BluetoothDevice[];
     connect(name: string): void;

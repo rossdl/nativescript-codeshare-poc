@@ -6,3 +6,17 @@ export class BluetoothDevice {
         this.Address = address;
     }
 }
+
+export enum BluetoothEventType {
+    connect = "connect",
+    disconnect = "disconnect",
+    message = "message",
+    error = "error",
+    connectError = "connectError"
+}
+
+export class BluetoothEvent {
+    action: BluetoothEventType;
+    deviceName: string;
+    message: string;
+}

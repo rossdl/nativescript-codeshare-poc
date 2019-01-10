@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
-import { BluetoothDevice } from "./BluetoothDevice";
+import { BluetoothDevice, BluetoothEventType, BluetoothEvent } from "./BluetoothDevice";
 import * as app from "tns-core-modules/application";
+import { Subject } from "rxjs";
+import { endianness } from "os";
 
 declare let me: any;
 
@@ -9,6 +11,8 @@ export class BluetoothService {
     private bluetooth: any[] = [];
 
     private readonly className: string = this.constructor.name;
+
+    public onEvent$ = new Subject<BluetoothEvent>();
 
     constructor() { 
         console.log('hey', this.className);
@@ -25,7 +29,15 @@ export class BluetoothService {
 
             if (me.aflak.bluetooth.Bluetooth) {
                 if (!this.has(name)) {
-                    this.bluetooth.push({ name: name, device: new me.aflak.bluetooth.Bluetooth(app.android.context) });
+                    const device = new me.aflak.bluetooth.Bluetooth(app.android.context);
+                    device.setDeviceCallback(new me.aflak.bluetooth.DeviceCallback({
+                        onDeviceConnected: (device: any) => { this.fireEvent(BluetoothEventType.connect, name, null) },
+                        onDeviceDisconnected: (device: any, message: string) => { this.fireEvent(BluetoothEventType.disconnect, name, message) },
+                        onMessage: (message: string) => { this.fireEvent(BluetoothEventType.message, name, message) },
+                        onError: (message: string) => { this.fireEvent(BluetoothEventType.error, name, message) },
+                        onConnectError: (device: any, message: string) => { this.fireEvent(BluetoothEventType.connectError, name, message) }
+                    }));
+                    this.bluetooth.push({ name: name, device: device });
                 }
                 console.log('this.bluetooth', this.bluetooth);
                 const bt = this.get(name);
@@ -131,6 +143,11 @@ export class BluetoothService {
 
     private sleep(ms: number): void {
         java.lang.Thread.sleep(ms);
+    }
+
+    private fireEvent(type: BluetoothEventType, name: string, message: string) {
+        const btEvent: BluetoothEvent = { action: type,  deviceName: name, message: message};
+        this.onEvent$.next(btEvent);
     }
 
     private logError(method: string, e: any) {

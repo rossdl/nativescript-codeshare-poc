@@ -10,12 +10,14 @@
         <Label text="List of paired devices" class="h2 text-center m-10"></Label>
         
         <ListView [items]="devices" (itemTap)="onItemTap(event)" class="list-group">
-        <ng-template let-device="item">
-            <Button [text]="device.name" (tap)="send(device.name, device.UUID)" 
-            class="btn btn-primary btn-grey" ></Button>
-        </ng-template>
+            <ng-template let-device="item">
+                <GridLayout columns="2*,*">
+                    <Button row="0" col="0" [text]="device.name" (tap)="toggle(device.name)" 
+                        class="btn btn-primary btn-grey" [ngClass]="{'connected': device.connected}"></Button>
+                    <Button row="0" col="1" *ngIf="device.connected" text="send" (tap)="send(device.name, device.UUID)" 
+                        class="btn btn-primary btn-sky"></Button>
+                </GridLayout>
+            </ng-template>
         </ListView>
-        
     </StackLayout>
-    
 </GridLayout>
