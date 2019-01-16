@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { BarcodeScanner } from "nativescript-barcodescanner";
-import { CardIo } from "digitaltown-nativescript-card-io";
-import { CreditCard } from 'digitaltown-nativescript-card-io/card-io.common';
+
+// card.io causes iOS app to crash; remove for now
+// import { CardIo } from "digitaltown-nativescript-card-io";
+// import { CreditCard } from 'digitaltown-nativescript-card-io/card-io.common';
 
 @Component({
   selector: 'app-search',
@@ -30,22 +32,22 @@ export class SearchComponent implements OnInit {
       });
   }
 
-  card() {
-      const cardIo = new CardIo();
+//   card() {
+//       const cardIo = new CardIo();
 
-      cardIo.scan({
-          android: {
-              requireExpiry: true,
-              requireCvv: true,
-              requirePostalCode: false,
-              returnCardImage: false,
-              usePaypalActionbarIcon: false
-          }
-      }).then((result: CreditCard) => {
-          console.log("CARD.IO RESULT >>> ", result);
-          this.scanValue = result.content;
-      }, error => {
-          console.log("CARD.IO ERROR >>> ", error);
-      });
-  }
+//       cardIo.scan({
+//           android: {
+//               requireExpiry: true,
+//               requireCvv: true,
+//               requirePostalCode: false,
+//               returnCardImage: false,
+//               usePaypalActionbarIcon: false
+//           }
+//       }).then((result: CreditCard) => {
+//           console.log("CARD.IO RESULT >>> ", result);
+//           this.scanValue = result.content;
+//       }, error => {
+//           console.log("CARD.IO ERROR >>> ", error);
+//       });
+//   }
 }

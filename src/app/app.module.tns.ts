@@ -12,6 +12,7 @@ import { ItemDetailComponent } from './item-detail/item-detail.component';
 import { BrowseComponent } from './browse/browse.component';
 import { SearchComponent } from './search/search.component';
 import { BluetoothService } from './core/bluetooth/BluetoothService';
+import { ImageService } from './core/image-service/image.service';
 
 
 // Uncomment and add to NgModule imports if you need to use two-way binding
@@ -33,7 +34,8 @@ import { BluetoothService } from './core/bluetooth/BluetoothService';
   providers: [
     BarcodeScanner,
     BluetoothService,
-    EventService
+    EventService,
+    ImageService
   ],
   bootstrap: [AppComponent],
   schemas: [NO_ERRORS_SCHEMA]

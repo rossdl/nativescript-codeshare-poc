@@ -20,7 +20,6 @@ export class BrowseComponent implements OnInit {
     private readonly cmdMag = "mag";
 
     devices: any[];
-    //someitems$: Observable<string[]>;
 
     constructor(private bluetoothService: BluetoothService) { }
 
@@ -119,7 +118,7 @@ export class BrowseComponent implements OnInit {
 
             const message = peripheral === this.cmdGate ? this.vendGateMessage()
                 : peripheral === this.cmdPrint ? this.printMessage()
-                    : undefined;
+                : undefined;
 
             if (message) {
                 console.log('send message', message);

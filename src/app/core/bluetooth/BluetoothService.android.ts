@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { BluetoothDevice, BluetoothEventType, BluetoothEvent } from "./BluetoothDevice";
 import * as app from "tns-core-modules/application";
 import { Subject } from "rxjs";
-import { endianness } from "os";
 
 declare let me: any;
 

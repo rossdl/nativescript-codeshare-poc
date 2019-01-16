@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ImageService } from './core/image-service/image.service';
 
 @Component({
   selector: 'app-root',
@@ -7,9 +8,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
+  constructor(private imageService: ImageService) { }
+
   getIconSource(icon: string): string {
-    //const iconPrefix = isAndroid ? "res://" : "res://tabIcons/";
-    const iconPrefix = "res://";
-    return iconPrefix + icon;
+    return this.imageService.getIconSource(icon);
   }
 }

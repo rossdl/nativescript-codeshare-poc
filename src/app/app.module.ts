@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { EventService } from './core/event-service/EventService';
 import { ItemDetailComponent } from './item-detail/item-detail.component';
+import { ImageService } from './core/image-service/image.service';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ItemDetailComponent } from './item-detail/item-detail.component';
     HttpClientModule
   ],
   providers: [
-    EventService
+    EventService,
+    ImageService
   ],
   bootstrap: [AppComponent]
 })
