@@ -2,18 +2,16 @@ import { Injectable } from "@angular/core";
 import { BluetoothDevice, BluetoothEventType, BluetoothEvent } from "./BluetoothDevice";
 import * as app from "tns-core-modules/application";
 import { Subject } from "rxjs";
+import { BluetoothServiceBase } from "./BluetoothServiceBase";
 
 declare let me: any;
 
 @Injectable()
-export class BluetoothService {
-    private bluetooth: any[] = [];
-
+export class BluetoothService extends BluetoothServiceBase {
     private readonly className: string = this.constructor.name;
 
-    public onEvent$ = new Subject<BluetoothEvent>();
-
     constructor() { 
+        super();
         console.log('hey', this.className);
     }
 
@@ -36,7 +34,7 @@ export class BluetoothService {
                         onError: (message: string) => { this.fireEvent(BluetoothEventType.error, name, message) },
                         onConnectError: (device: any, message: string) => { this.fireEvent(BluetoothEventType.connectError, name, message) }
                     }));
-                    this.bluetooth.push({ name: name, device: device });
+                    this.add(name, device);
                 }
                 console.log('this.bluetooth', this.bluetooth);
                 const bt = this.get(name);
@@ -128,25 +126,8 @@ export class BluetoothService {
         this.start(name);
     }
 
-    private has(name: string): boolean {
-        return this.bluetooth.some(b => b.name === name);
-    }
-
-    private get(name: string): any {
-        const device = this.has(name)
-            ? this.bluetooth.find(b => b.name === name).device
-            : null;
-        console.log('get', name, device);
-        return device;
-    }
-
     private sleep(ms: number): void {
         java.lang.Thread.sleep(ms);
-    }
-
-    private fireEvent(type: BluetoothEventType, name: string, message: string) {
-        const btEvent: BluetoothEvent = { action: type,  deviceName: name, message: message};
-        this.onEvent$.next(btEvent);
     }
 
     private logError(method: string, e: any) {
