@@ -8,7 +8,6 @@ export class BluetoothService extends BluetoothServiceBase {
     private sessions: any = Object.create(null);
 
     private inputStreamDelegate: any;
-    private delegateCount: number = 1;
 
     constructor() { 
         super();
@@ -74,6 +73,7 @@ export class BluetoothService extends BluetoothServiceBase {
 
         // open input stream
         if (session.inputStream.streamStatus !== NSStreamStatus.Open) {
+            const delegateName = "SD".concat((new Date).toJSON().replace(/\D+/g, "").substr(4));
             let streamDelegate = (NSObject as any).extend({
                 streamHandleEvent: (stream: NSStream, code: NSStreamEvent) => {
                     console.log('>>> event occurred', name, code);
@@ -83,65 +83,30 @@ export class BluetoothService extends BluetoothServiceBase {
                             break;
     
                         case NSStreamEvent.HasBytesAvailable:
-                            console.log('>>> stream is NSInputStream', stream instanceof NSInputStream);
-                            try {
-                                let buffer = interop.alloc(1024);
-                                const length = (stream as NSInputStream).readMaxLength(buffer, 1024);
-                                console.log('>>> data read', length, buffer);
+                            let buffer = interop.alloc(1024);
+                            const length = (stream as NSInputStream).readMaxLength(buffer, 1024);
+                            console.log('>>> data read', length, buffer);
 
-                                let result: NSString;
-                                let data: string;
-                                const flag = new Date().getSeconds();
-                                if (flag < 12) {
-                                    console.log(">>> mutable ascii string");
-                                    let mutableData1 = NSMutableData.new();
-                                    mutableData1.appendBytesLength(buffer, length); 
-                                    result = NSString.alloc().initWithDataEncoding(mutableData1, NSASCIIStringEncoding);
-                                } else if (flag < 24) {
-                                    console.log(">>> mutable utf8 string");
-                                    let mutableData2 = NSMutableData.new();
-                                    mutableData2.appendBytesLength(buffer, length);
-                                    result = NSString.alloc().initWithDataEncoding(mutableData2, NSUTF8StringEncoding);
-                                } else if (flag < 36) {
-                                    console.log(">>> utf8 string");
-                                    result = NSString.stringWithUTF8String(buffer);
-                                } else if (flag < 48) {
-                                    console.log(">>> CString");
-                                    result = NSString.stringWithCStringEncoding(buffer, NSASCIIStringEncoding);
-                                } else {
-                                    // this didn't seem to work
-                                    // e.g.
-                                    // >>> interop
-                                    // >>> refstring
-                                    // >>> result \M-b\M^T\M^B
-                                    // >>> data \M-b\M^T\M^B
-                                    console.log(">>> interop");
-                                    let iref  = new interop.Reference(interop.types.unichar, buffer);
-                                    let refstring = "";
-                                    for (var i = 0; i++; i < length) {
-                                        refstring += iref[i];
-                                    }
-                                    console.log(`>>> refstring`, refstring);
-                                    result = NSString.stringWithString(iref.value);
-                                }
+                            const mutableData = NSMutableData.new();
+                            mutableData.appendBytesLength(buffer, length);
 
-                                console.log(">>> result", result);
+                            const data = NSString.alloc().initWithDataEncoding(mutableData, NSASCIIStringEncoding).toString();
+                            console.log(">>> data", data);
 
-                                data = result.toString();
-                                console.log(">>> data", data);
-
-                                this.fireEvent(BluetoothEventType.message, name, data); 
+                            // emit read by line breaks and/or carriage returns
+                            // similar to Android BufferedReader.readLine();
+                            const linePattern = /[\r\n]+/;
+                            if (data.match(linePattern)) {
+                                var lines = data.split(linePattern);
+                                lines.forEach(line => this.fireEvent(BluetoothEventType.message, name, line));
                             }
-                            catch (e) { console.log(">>> get data failed", e) };
-                            break;
                     }
                 }
             }, {
-                name: `BtStreamDelegate${this.delegateCount}`,
+                name: delegateName,
                 protocols: [NSStreamDelegate]
             });
     
-            this.delegateCount++;
             this.inputStreamDelegate = streamDelegate.new();
             session.inputStream.delegate = this.inputStreamDelegate;
 
