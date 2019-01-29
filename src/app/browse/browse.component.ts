@@ -18,12 +18,17 @@ export class BrowseComponent implements OnInit {
     private readonly cmdPrint = "print";
     private readonly cmdGate = "gate";
     private readonly cmdMag = "mag";
-
-    devices: any[];
+    private peripherals: any[];
 
     constructor(private bluetoothService: BluetoothService) { }
 
     ngOnInit() {
+        this.peripherals = [
+            { id: this.cmdPrint, type: 'Printer', name: null, action: 'print', message: this.printMessage(), connected: false },
+            { id: this.cmdGate, type: 'Gate', name: null, action: 'pulse', message: this.vendGateMessage(), connected: false },
+            { id: this.cmdMag, type: 'Mag Reader', name: null, action: null, connected: false }
+        ];
+
         this.isEnabledSubscription = this.listenToBluetoothEnabled()
             .pipe(distinctUntilChanged())
             .subscribe(enabled => this.isBluetoothEnabled = enabled);
@@ -31,7 +36,7 @@ export class BrowseComponent implements OnInit {
         this.bluetoothService.onEvent$.subscribe((bte: BluetoothEvent) => {
             console.log(bte);
 
-            const device = this.devices.find(d => d.name === bte.deviceName);
+            const peripheral = this.peripherals.find(p => p.name === bte.deviceName);
 
             switch (bte.action) {
                 case BluetoothEventType.message:
@@ -44,11 +49,12 @@ export class BrowseComponent implements OnInit {
                     break;
 
                 case BluetoothEventType.connect:
-                    device.connected = true;
+                    console.log('>>>', bte.deviceName, 'connected');
+                    peripheral.connected = true;
                     break;
 
                 case BluetoothEventType.disconnect:
-                    device.connected = false;
+                    console.log('>>>', bte.deviceName, 'disconnected');
                     break;
             }
         });
@@ -76,61 +82,48 @@ export class BrowseComponent implements OnInit {
         });
     }
 
-    addDevice(name: string, UUID: string) {
-        this.devices.push({ name, UUID, connected: false });
-    }
+    setDevice(id: string) {
+        const cancel = "No Device";
+        const devices = this.bluetoothService.getPairedDevices();
+        const peripheral = this.peripherals.find(p => p.id === id);
+        const { name, connected } = peripheral;
+        dialogs.action({
+            message: `Select ${peripheral.type}`,
+            cancelButtonText: cancel,
+            actions: devices.map(d => d.Name)
+        }).then(deviceName => {
+            setTimeout(() => {
+                // do nothing if same device is connected
+                if (connected && name === deviceName) return;
 
-    listDevices() {
-        try {
-            let pairedDevices = this.bluetoothService.getPairedDevices();
-            pairedDevices.forEach(dev => {
-                console.log(dev.Address);
-                let uuid: string;
-                if (dev.Name.toLowerCase().includes(this.cmdGate)) {
-                    uuid = this.cmdGate;
-                } else if (dev.Name.toLowerCase().includes(this.cmdMag)) {
-                    uuid = this.cmdMag;
-                } else {
-                    uuid = this.cmdPrint;
+                peripheral.name = deviceName !== cancel ? deviceName : null;
+                peripheral.connected = false;
+
+                // disconnect old device
+                if (name && this.bluetoothService.isConnected(name)) {
+                    this.bluetoothService.disconnect(name);
                 }
-                this.addDevice(dev.Name, uuid);
-            });
-        }
-        catch (e) {
-            console.log(e);
+
+                // connect if device selected
+                if (peripheral.name) {
+                    this.bluetoothService.connect(peripheral.name);
+                }
+            }, 100);
+        });
+    }
+
+    send(id: string) {
+        const peripheral = this.peripherals.find(p => p.id === id);
+        if (!peripheral) return;
+
+        const { name, message} = peripheral;
+        if(name && message && this.bluetoothService.isConnected(name)) {
+            console.log('send message', name, message);
+            this.bluetoothService.send(name, message);
         }
     }
 
-    toggle(name: string) {
-        const device = this.devices.find(d => d.name === name);
-        if (device && device.connected) {
-            this.bluetoothService.disconnect(name);
-        } else {
-            this.bluetoothService.connect(name);
-        }
-    }
-
-    send(name: string, peripheral: string) {
-        try {
-            if (!this.bluetoothService.isConnected(name)) {
-                return;
-            }
-
-            const message = peripheral === this.cmdGate ? this.vendGateMessage()
-                : peripheral === this.cmdPrint ? this.printMessage()
-                : undefined;
-
-            if (message) {
-                console.log('send message', message);
-                this.bluetoothService.send(name, message);
-            }
-        }
-        catch (e) {
-            console.log(e);
-        }
-    }
-
-    printMessage(): string {
+    private printMessage(): string {
         //let message = "ABC";
         let barcode = this.randomBarcode();
         let message = "! 0 200 200 300 1\r\n";
@@ -142,24 +135,12 @@ export class BrowseComponent implements OnInit {
         return message;
     }
 
-    vendGateMessage(): string {
+    private vendGateMessage(): string {
         return String.fromCharCode(1).concat('\n');
     }
 
-    randomBarcode(): string {
+    private randomBarcode(): string {
         return Array(10).join((Math.random().toString(11) + '00000000000000000').slice(2, 18)).slice(0, 9);
-    }
-
-    scan() {
-        // for PoC, disconnect and start over
-        (this.devices || []).forEach(d => {
-            if (d.connected) {
-                this.bluetoothService.disconnect(d.name);
-            }
-        });
-
-        this.devices = [];
-        this.listDevices();
     }
 
     private alert(title: string, message: string) {

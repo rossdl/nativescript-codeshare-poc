@@ -1,12 +1,9 @@
-import { Injectable } from "@angular/core";
 import { BluetoothDevice, BluetoothEventType, BluetoothEvent } from "./BluetoothDevice";
 import * as app from "tns-core-modules/application";
-import { Subject } from "rxjs";
 import { BluetoothServiceBase } from "./BluetoothServiceBase";
 
 declare let me: any;
 
-@Injectable()
 export class BluetoothService extends BluetoothServiceBase {
     private readonly className: string = this.constructor.name;
 

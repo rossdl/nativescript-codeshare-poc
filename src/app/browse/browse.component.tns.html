@@ -6,16 +6,13 @@
     <Label *ngIf="!isBluetoothEnabled" text="Please enable bluetooth" class="text-danger text-center h2"></Label>
     
     <StackLayout *ngIf="isBluetoothEnabled">
-        <Button text="Scan" (tap)="scan()" class="btn btn-primary" width="75%"></Button>
-        <Label text="List of paired devices" class="h2 text-center m-10"></Label>
-        
-        <ListView [items]="devices" (itemTap)="onItemTap(event)" class="list-group">
-            <ng-template let-device="item">
-                <GridLayout columns="2*,*">
-                    <Button row="0" col="0" [text]="device.name" (tap)="toggle(device.name)" 
-                        class="btn btn-primary btn-grey" [ngClass]="{'connected': device.connected}"></Button>
-                    <Button row="0" col="1" *ngIf="device.connected" text="send" (tap)="send(device.name, device.UUID)" 
-                        class="btn btn-primary btn-sky"></Button>
+        <Label text="Select devices" class="h2 text-center m-10"></Label>
+        <ListView [items]="peripherals" class="list-group">
+            <ng-template let-peripheral="item">
+                <GridLayout columns="2*,*" rows="auto, auto">
+                    <Button row="0" col="0" [text]="peripheral.type" (tap)="setDevice(peripheral.id)" [ngClass]="{'connected': peripheral.connected}" class="btn btn-primary btn-grey"></Button>
+                    <Button row="0" col="1" *ngIf="peripheral.connected && peripheral.action" [text]="peripheral.action" (tap)=send(peripheral.id) class="btn btn-primary"></Button>
+                    <Label row="1" colSpan="2" [text]="peripheral.name" class="h3 text-center m-3"></Label>
                 </GridLayout>
             </ng-template>
         </ListView>

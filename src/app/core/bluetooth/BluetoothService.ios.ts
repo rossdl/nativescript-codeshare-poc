@@ -1,8 +1,6 @@
-import { Injectable } from "@angular/core";
 import { BluetoothDevice, BluetoothEventType, BluetoothEvent } from "./BluetoothDevice";
 import { BluetoothServiceBase } from "./BluetoothServiceBase";
 
-@Injectable()
 export class BluetoothService extends BluetoothServiceBase {
     private readonly className: string = this.constructor.name;
     private sessions: any = Object.create(null);
