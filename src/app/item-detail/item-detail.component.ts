@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ParkingEvent, SiteRate, EventRate, EventLot } from '../core/event-service/EventModels';
+import { ParkingEvent } from '../core/event-service/EventModels';
 import { EventService } from '../core/event-service/EventService';
+import { PaymentService } from '../core/payment-service/payment.service';
+import { tap, skipWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'app-item-detail',
@@ -12,7 +14,12 @@ export class ItemDetailComponent implements OnInit {
   item: ParkingEvent;
   rates: any[];
 
-  constructor(private route: ActivatedRoute, private eventService: EventService) { }
+  processing: boolean = false;
+  charge: string;
+  status: string;
+
+  constructor(private route: ActivatedRoute, private eventService: EventService,
+    private paymentService: PaymentService) { }
 
   ngOnInit() {
     const id = this.route.snapshot.params.id;
@@ -26,4 +33,14 @@ export class ItemDetailComponent implements OnInit {
     });
   }
 
+  purchase(amount: number): void {
+    this.charge = `$${amount.toFixed(2)}`;
+    this.status = "SEND REQUEST";
+    this.processing = true;
+
+    this.paymentService.sendPurchase(amount).pipe(
+      tap(r => this.status = r.DL1.concat('\n', r.DL2)),
+      skipWhile(r => r.Complete !== 1)
+    ).subscribe(_ => setTimeout(() => { this.processing = false }, 3000))
+  }
 }

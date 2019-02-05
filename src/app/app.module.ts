@@ -8,6 +8,7 @@ import { HomeComponent } from './home/home.component';
 import { EventService } from './core/event-service/EventService';
 import { ItemDetailComponent } from './item-detail/item-detail.component';
 import { ImageService } from './core/image-service/image.service';
+import { PaymentService } from './core/payment-service/payment.service';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { ImageService } from './core/image-service/image.service';
   ],
   providers: [
     EventService,
-    ImageService
+    ImageService,
+    PaymentService
   ],
   bootstrap: [AppComponent]
 })

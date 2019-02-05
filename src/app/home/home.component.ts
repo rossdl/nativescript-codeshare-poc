@@ -20,6 +20,11 @@ export class HomeComponent implements OnInit {
     this.loadEvents();
   }
 
+  toggleMode(args: any): void {
+    this.eventService.offline = !this.eventService.offline;
+    this.loadEvents();
+  }
+
   private loadEvents(): void {
     this.eventService.getEvents().then(events => {
       this.items = events

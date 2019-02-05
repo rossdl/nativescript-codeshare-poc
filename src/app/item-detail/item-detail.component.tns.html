@@ -4,9 +4,15 @@
 </ActionBar>
 
 <GridLayout>
-    <ListView [items]="rates" class="list-group">
+    <ListView *ngIf="!processing" [items]="rates" class="list-group">
         <ng-template let-rate="item">
-            <Label text="{{rate.lot}} {{rate.name}} ${{rate.fee}}" class="list-group-item"></Label>
+            <Label text="{{rate.lot}} {{rate.name}} ${{rate.fee}}" (tap)="purchase(rate.fee)" class="list-group-item"></Label>
         </ng-template>
     </ListView>
+    <StackLayout *ngIf="processing">
+        <Label [text]="charge" class="h1 text-center m-10" textWrap="true"></Label>
+        <Label [text]="status" class="h2 text-center m-10" textWrap="true"></Label>
+    </StackLayout>
+    <ActivityIndicator [busy]="processing" [visibility]="processing ? 'visible' : 'collapse'" 
+        horizontalAlignment="center" verticalAlignment="center" color="blue" width="100" height="100"></ActivityIndicator>
 </GridLayout>
