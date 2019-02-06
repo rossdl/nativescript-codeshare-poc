@@ -76,28 +76,14 @@ export class BluetoothService extends BluetoothServiceBase {
     }       
 
     connect(name: string) {
-        // PoC of course
         try {
             if (!this.has(name)) {
-                console.log(`add name ${name}`);
                 this.start(name);
             }
 
             if (!this.isConnected(name)) {
                 console.log(`Connect to ${name}`);
                 this.get(name).connectToName(name, true);
-            }
-
-            let attempt = 0;
-            while (!this.isConnected(name) && attempt < 10) {
-                this.sleep(500);
-                attempt++;
-            }
-
-            if (!this.isConnected(name)) {
-                console.log('can\'t connect, try again');
-                this.reset(name);
-                return;
             }
         }
         catch (e) {
@@ -113,18 +99,6 @@ export class BluetoothService extends BluetoothServiceBase {
 
     send(name: string, message: string): void {
         this.get(name).send(message, null);
-    }
-
-    // no idea if this is truly necessary yet
-    private reset(name: string) {
-        console.log('reset');
-        this.stop(name);
-        this.sleep(500);
-        this.start(name);
-    }
-
-    private sleep(ms: number): void {
-        java.lang.Thread.sleep(ms);
     }
 
     private logError(method: string, e: any) {

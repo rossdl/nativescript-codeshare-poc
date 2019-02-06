@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, Subscription } from "rxjs";
+import { Observable, Subscription, Subject } from "rxjs";
 import { distinctUntilChanged } from 'rxjs/operators';
 import { BluetoothService } from '../core/bluetooth/BluetoothService';
 import * as bluetooth from 'nativescript-bluetooth';
 import * as dialogs from 'tns-core-modules/ui/dialogs';
 import { BluetoothEvent, BluetoothEventType } from '../core/bluetooth/BluetoothDevice';
+import { ApplicationSettings } from '../core/storage/app.settings';
 
 @Component({
     selector: 'app-browse',
@@ -20,13 +21,14 @@ export class BrowseComponent implements OnInit {
     private readonly cmdMag = "mag";
     private peripherals: any[];
 
-    constructor(private bluetoothService: BluetoothService) { }
+    constructor(private settings: ApplicationSettings, private bluetoothService: BluetoothService) { }
 
     ngOnInit() {
+        const { printerName, magReaderName, gateName } = this.settings.getPeripherals();
         this.peripherals = [
-            { id: this.cmdPrint, type: 'Printer', name: null, action: 'print', message: this.printMessage(), connected: false },
-            { id: this.cmdGate, type: 'Gate', name: null, action: 'pulse', message: this.vendGateMessage(), connected: false },
-            { id: this.cmdMag, type: 'Mag Reader', name: null, action: null, connected: false }
+            { id: this.cmdPrint, type: 'Printer', name: printerName, action: 'print', message: this.printMessage(), connected: false },
+            { id: this.cmdGate, type: 'Gate', name: gateName, action: 'pulse', message: this.vendGateMessage(), connected: false },
+            { id: this.cmdMag, type: 'Mag Reader', name: magReaderName, action: null, connected: false }
         ];
 
         this.isEnabledSubscription = this.listenToBluetoothEnabled()
@@ -102,6 +104,19 @@ export class BrowseComponent implements OnInit {
                 // disconnect old device
                 if (name && this.bluetoothService.isConnected(name)) {
                     this.bluetoothService.disconnect(name);
+                }
+
+                // store new selection
+                switch (id) {
+                    case this.cmdPrint:
+                        this.settings.printerName = peripheral.name;
+                        break;
+                    case this.cmdMag:
+                        this.settings.magReaderName = peripheral.name;
+                        break;
+                    case this.cmdGate:
+                        this.settings.gateName = peripheral.name;
+                        break;
                 }
 
                 // connect if device selected

@@ -14,6 +14,8 @@ import { SearchComponent } from './search/search.component';
 import { BluetoothService } from './core/bluetooth/BluetoothService';
 import { ImageService } from './core/image-service/image.service';
 import { PaymentService } from './core/payment-service/payment.service';
+import { ApplicationSettings } from './core/storage/app.settings';
+import { StorageService } from './core/storage/storage.service';
 
 
 // Uncomment and add to NgModule imports if you need to use two-way binding
@@ -33,11 +35,13 @@ import { PaymentService } from './core/payment-service/payment.service';
     NativeScriptHttpClientModule
   ],
   providers: [
+    ApplicationSettings,
     BarcodeScanner,
     BluetoothService,
     EventService,
     ImageService,
-    PaymentService
+    PaymentService,
+    StorageService
   ],
   bootstrap: [AppComponent],
   schemas: [NO_ERRORS_SCHEMA]
