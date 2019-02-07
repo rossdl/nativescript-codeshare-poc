@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ParkingEvent } from '../core/event-service/EventModels';
-import { EventService } from '../core/event-service/EventService';
+import { ParkingEvent } from '../core/event-service/event.models';
+import { EventService } from '../core/event-service/event.service';
 import { PaymentService } from '../core/payment-service/payment.service';
 import { tap, skipWhile } from 'rxjs/operators';
 

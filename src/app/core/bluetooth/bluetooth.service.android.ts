@@ -1,6 +1,6 @@
-import { BluetoothDevice, BluetoothEventType, BluetoothEvent } from "./BluetoothDevice";
+import { BluetoothDevice, BluetoothEventType, BluetoothEvent } from "./bluetooth.models";
 import * as app from "tns-core-modules/application";
-import { BluetoothServiceBase } from "./BluetoothServiceBase";
+import { BluetoothServiceBase } from "./bluetooth.service.base";
 
 declare let me: any;
 

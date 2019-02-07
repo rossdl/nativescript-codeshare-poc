@@ -1,5 +1,5 @@
 import { Subject } from "rxjs";
-import { BluetoothEvent, BluetoothEventType } from "./BluetoothDevice";
+import { BluetoothEvent, BluetoothEventType } from "./bluetooth.models";
 
 export abstract class BluetoothServiceBase {
     public onEvent$ = new Subject<BluetoothEvent>();

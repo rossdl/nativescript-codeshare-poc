@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, Subscription, Subject } from "rxjs";
 import { distinctUntilChanged } from 'rxjs/operators';
-import { BluetoothService } from '../core/bluetooth/BluetoothService';
+import { BluetoothService } from '../core/bluetooth/bluetooth.service';
 import * as bluetooth from 'nativescript-bluetooth';
 import * as dialogs from 'tns-core-modules/ui/dialogs';
-import { BluetoothEvent, BluetoothEventType } from '../core/bluetooth/BluetoothDevice';
+import { BluetoothEvent, BluetoothEventType } from '../core/bluetooth/bluetooth.models';
 import { ApplicationSettings } from '../core/storage/app.settings';
 
 @Component({

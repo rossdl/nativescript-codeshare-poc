@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { ParkingEvent, EventRate, SiteRate, SiteLot } from "./EventModels";
+import { ParkingEvent, EventRate, SiteRate, SiteLot } from "./event.models";
 import { Observable, forkJoin } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { siteEvents, eventRates, siteRates, siteLots } from "./offline.data";

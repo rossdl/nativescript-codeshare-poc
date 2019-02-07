@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { EventService } from '../core/event-service/EventService';
-import { ParkingEvent } from '../core/event-service/EventModels';
+import { EventService } from '../core/event-service/event.service';
+import { ParkingEvent } from '../core/event-service/event.models';
 
 @Component({
   selector: 'app-home',

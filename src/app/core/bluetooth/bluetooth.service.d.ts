@@ -1,4 +1,4 @@
-import { BluetoothDevice, BluetoothEvent } from "./BluetoothDevice";
+import { BluetoothDevice, BluetoothEvent } from "./bluetooth.models";
 import { Subject } from "rxjs";
 
 //TODO probably need a PrinterService, MagStripeService, GateModuleService

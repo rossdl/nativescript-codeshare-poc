@@ -1,5 +1,5 @@
-import { BluetoothDevice, BluetoothEventType, BluetoothEvent } from "./BluetoothDevice";
-import { BluetoothServiceBase } from "./BluetoothServiceBase";
+import { BluetoothDevice, BluetoothEventType, BluetoothEvent } from "./bluetooth.models";
+import { BluetoothServiceBase } from "./bluetooth.service.base";
 
 export class BluetoothService extends BluetoothServiceBase {
     private readonly className: string = this.constructor.name;

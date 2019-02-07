@@ -1,5 +1,5 @@
 import { of } from "rxjs";
-import { ParkingEvent, EventRate, SiteRate, SiteLot } from "./EventModels";
+import { ParkingEvent, EventRate, SiteRate, SiteLot } from "./event.models";
 
 export const siteEvents = of(<any>[{"EventID":"10918","EventDesc":"Something Fun.... I hope!","EventStart":"2018-10-09T00:00:00","EventEnd":"2019-01-31T08:00:00","IsDefault":false,"LastUpdated":"2019-01-03T09:20:06.837","AllowReEntry":0,"ReEntryTimeout":0,"AllowPassback":2,"PassbackTimeout":0},{"EventID":"121718","EventDesc":"Winter event","EventStart":"2018-12-17T00:00:00","EventEnd":"2019-01-31T23:59:00","IsDefault":false,"LastUpdated":"2019-01-03T09:19:13.253","AllowReEntry":0,"ReEntryTimeout":0,"AllowPassback":2,"PassbackTimeout":0}] as ParkingEvent[]);
 export const siteLots = of(<any>[{"LotID":1,"LotDesc":"Lot A","SiteGUID":"e5f3a3c6-58d9-48ac-94e6-bf2c7687fef5"},{"LotID":2,"LotDesc":"Lot B","SiteGUID":"b510bc4a-8ce2-40e9-8ab8-801c53280127"}] as SiteLot[]);
