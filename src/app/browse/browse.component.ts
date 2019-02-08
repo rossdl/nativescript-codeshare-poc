@@ -41,15 +41,6 @@ export class BrowseComponent implements OnInit {
             const peripheral = this.peripherals.find(p => p.name === bte.deviceName);
 
             switch (bte.action) {
-                case BluetoothEventType.message:
-                    const message: string = bte.message;
-                    if (!message.startsWith(';'))
-                        return;
-        
-                    const cardNo = message.substr(1, 16);
-                    this.alert('Credit Card', cardNo);
-                    break;
-
                 case BluetoothEventType.connect:
                     console.log('>>>', bte.deviceName, 'connected');
                     peripheral.connected = true;
@@ -156,13 +147,5 @@ export class BrowseComponent implements OnInit {
 
     private randomBarcode(): string {
         return Array(10).join((Math.random().toString(11) + '00000000000000000').slice(2, 18)).slice(0, 9);
-    }
-
-    private alert(title: string, message: string) {
-        dialogs.alert({
-            title: title,
-            message: message,
-            okButtonText: "Ok"
-        });
     }
 }

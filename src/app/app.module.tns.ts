@@ -16,6 +16,9 @@ import { ImageService } from './core/image-service/image.service';
 import { PaymentService } from './core/payment-service/payment.service';
 import { ApplicationSettings } from './core/storage/app.settings';
 import { StorageService } from './core/storage/storage.service';
+import { PrinterService } from './core/peripherals/printer.service';
+import { MagReaderService } from './core/peripherals/magreader.service';
+import { GateService } from './core/peripherals/gate.service';
 
 
 // Uncomment and add to NgModule imports if you need to use two-way binding
@@ -39,8 +42,11 @@ import { StorageService } from './core/storage/storage.service';
     BarcodeScanner,
     BluetoothService,
     EventService,
+    GateService,
     ImageService,
+    MagReaderService,
     PaymentService,
+    PrinterService,
     StorageService
   ],
   bootstrap: [AppComponent],

@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { StorageService } from "./storage.service";
 import { PeripheralSettings } from "./app.settings.models";
+import { Subject } from "rxjs";
 
 const enum StorageKey {
     Peripherals = "PERIPHERALS"
@@ -10,6 +11,8 @@ const enum StorageKey {
 export class ApplicationSettings { 
     
     constructor(private storageService: StorageService) { }
+
+    peripheralsChanged$ = new Subject<PeripheralSettings>();
 
     set printerName(value: string) {
         const peripheral = { ...this.getPeripherals(), printerName: value };
@@ -32,6 +35,7 @@ export class ApplicationSettings {
 
     setPeripherals(value: PeripheralSettings): void {
         this.save(StorageKey.Peripherals, value);
+        this.peripheralsChanged$.next(value);
     }
 
     private load<T>(key: string): T {

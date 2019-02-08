@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BarcodeScanner } from "nativescript-barcodescanner";
+import { MagReaderService } from '../core/peripherals/magreader.service';
 
 // card.io causes iOS app to crash; remove for now
 // import { CardIo } from "digitaltown-nativescript-card-io";
@@ -13,23 +14,21 @@ import { BarcodeScanner } from "nativescript-barcodescanner";
 export class SearchComponent implements OnInit {
   scanValue: string = "";
 
-  constructor(private barcodeScanner: BarcodeScanner) {
-      // Use the constructor to inject services.
-  }
+  constructor(private barcodeScanner: BarcodeScanner, private magReaderService: MagReaderService) { }
 
   ngOnInit(): void {
-      // Use the "ngOnInit" handler to initialize data for the view.
+      this.magReaderService.onCreditCard.subscribe(m => this.scanValue = m );
   }
 
   scan() {
-      this.barcodeScanner.scan({
-          formats: "QR_CODE, CODE_39",
-          beepOnScan: true,
-      }).then(r => {
-          console.log("scan result:");
-          console.log(r.format, r.text);
-          this.scanValue = r.text;
-      });
+    this.barcodeScanner.scan({
+        formats: "QR_CODE, CODE_39",
+        beepOnScan: true,
+    }).then(r => {
+        console.log("scan result:");
+        console.log(r.format, r.text);
+        this.scanValue = r.text;
+    });
   }
 
 //   card() {
