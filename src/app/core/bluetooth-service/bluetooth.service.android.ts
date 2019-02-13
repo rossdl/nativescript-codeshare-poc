@@ -98,6 +98,7 @@ export class BluetoothService extends BluetoothServiceBase {
     }
 
     send(name: string, message: string): void {
+        console.log('bluetoothService.android.send', name, message);
         this.get(name).send(message, null);
     }
 

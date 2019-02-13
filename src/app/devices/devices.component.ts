@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, Subscription, Subject } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { distinctUntilChanged } from 'rxjs/operators';
-import { BluetoothService } from '../core/bluetooth/bluetooth.service';
+import { BluetoothService } from '../core/bluetooth-service/bluetooth.service';
 import * as bluetooth from 'nativescript-bluetooth';
 import * as dialogs from 'tns-core-modules/ui/dialogs';
-import { BluetoothEvent, BluetoothEventType } from '../core/bluetooth/bluetooth.models';
+import { BluetoothEvent, BluetoothEventType } from '../core/bluetooth-service/bluetooth.models';
 import { ApplicationSettings } from '../core/storage/app.settings';
 
 @Component({
-    selector: 'app-browse',
-    templateUrl: './browse.component.html',
-    styleUrls: ['./browse.component.css']
+    selector: 'app-devices',
+    templateUrl: './devices.component.html',
+    styleUrls: ['./devices.component.css']
 })
-export class BrowseComponent implements OnInit {
+export class DevicesComponent implements OnInit {
     isEnabledSubscription: Subscription;
     isBluetoothEnabled = false;
 

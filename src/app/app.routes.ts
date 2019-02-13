@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
 
-import { HomeComponent } from './home/home.component';
-import { ItemDetailComponent } from './item-detail/item-detail.component';
+import { EventsComponent } from './events/events.component';
+import { EventRatesComponent } from './event-rates/event-rates.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full'},
-  { path: 'home', component: HomeComponent },
-  { path: 'item/:id', component: ItemDetailComponent },
+  { path: '', redirectTo: '/events', pathMatch: 'full'},
+  { path: 'events', component: EventsComponent },
+  { path: 'rates/:id', component: EventRatesComponent },
 ];

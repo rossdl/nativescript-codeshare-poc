@@ -4,17 +4,17 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
+import { EventsComponent } from './events/events.component';
 import { EventService } from './core/event-service/event.service';
-import { ItemDetailComponent } from './item-detail/item-detail.component';
+import { EventRatesComponent } from './event-rates/event-rates.component';
 import { ImageService } from './core/image-service/image.service';
 import { PaymentService } from './core/payment-service/payment.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
-    ItemDetailComponent
+    EventsComponent,
+    EventRatesComponent
   ],
   imports: [
     BrowserModule,

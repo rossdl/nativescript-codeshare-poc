@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ApplicationSettings } from "../storage/app.settings";
-import { BluetoothService } from "../bluetooth/bluetooth.service";
+import { BluetoothService } from "../bluetooth-service/bluetooth.service";
 import { PeripheralServiceBase } from "./peripheral.service.base";
 
 @Injectable()

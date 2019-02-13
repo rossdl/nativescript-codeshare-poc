@@ -3,12 +3,13 @@ import { EventService } from '../core/event-service/event.service';
 import { ParkingEvent } from '../core/event-service/event.models';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  selector: 'app-events',
+  templateUrl: './events.component.html',
+  styleUrls: ['./events.component.css'],
 })
-export class HomeComponent implements OnInit {
+export class EventsComponent implements OnInit {
   items: Array<ParkingEvent>;
+  errorMessage: string;
 
   constructor(private eventService: EventService) { }
 
@@ -27,7 +28,11 @@ export class HomeComponent implements OnInit {
 
   private loadEvents(): void {
     this.eventService.getEvents().then(events => {
-      this.items = events
+      this.items = events;
+      this.errorMessage = null;
+    }).catch(err => {
+      this.items = [];
+      this.errorMessage = err.message;
     });
   }
 }

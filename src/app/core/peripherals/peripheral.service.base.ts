@@ -1,7 +1,7 @@
 import { ApplicationSettings } from "../storage/app.settings";
-import { BluetoothService } from "../bluetooth/bluetooth.service";
+import { BluetoothService } from "../bluetooth-service/bluetooth.service";
+import { BluetoothEvent } from "../bluetooth-service/bluetooth.models";
 import { Observable } from "rxjs";
-import { BluetoothEvent } from "../bluetooth/bluetooth.models";
 import { filter, map, distinctUntilChanged } from "rxjs/operators";
 
 

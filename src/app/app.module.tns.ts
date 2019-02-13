@@ -6,12 +6,12 @@ import { BarcodeScanner } from 'nativescript-barcodescanner';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
+import { EventsComponent } from './events/events.component';
 import { EventService } from './core/event-service/event.service';
-import { ItemDetailComponent } from './item-detail/item-detail.component';
-import { BrowseComponent } from './browse/browse.component';
-import { SearchComponent } from './search/search.component';
-import { BluetoothService } from './core/bluetooth/bluetooth.service';
+import { EventRatesComponent } from './event-rates/event-rates.component';
+import { DevicesComponent } from './devices/devices.component';
+import { ScanComponent } from './scan/scan.component';
+import { BluetoothService } from './core/bluetooth-service/bluetooth.service';
 import { ImageService } from './core/image-service/image.service';
 import { PaymentService } from './core/payment-service/payment.service';
 import { ApplicationSettings } from './core/storage/app.settings';
@@ -27,10 +27,10 @@ import { GateService } from './core/peripherals/gate.service';
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
-    ItemDetailComponent,
-    BrowseComponent,
-    SearchComponent
+    EventsComponent,
+    EventRatesComponent,
+    DevicesComponent,
+    ScanComponent
   ],
   imports: [
     NativeScriptModule,

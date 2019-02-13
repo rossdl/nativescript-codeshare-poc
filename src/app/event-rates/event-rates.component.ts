@@ -6,11 +6,10 @@ import { PaymentService } from '../core/payment-service/payment.service';
 import { tap, skipWhile } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-item-detail',
-  templateUrl: './item-detail.component.html',
-  styleUrls: ['./item-detail.component.css']
+  selector: 'app-event-rates',
+  templateUrl: './event-rates.component.html'
 })
-export class ItemDetailComponent implements OnInit {
+export class EventRatesComponent implements OnInit {
   item: ParkingEvent;
   rates: any[];
 

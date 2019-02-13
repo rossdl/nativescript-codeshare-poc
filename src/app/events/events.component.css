@@ -1,0 +1,12 @@
+/* EventsComponent's private CSS styles */
+.offline {
+    background-color: grey;
+}
+.online {
+    background-color: green;
+}
+.error {
+    color: red;
+    padding: 8px;
+    font-size: 0.8em;
+}

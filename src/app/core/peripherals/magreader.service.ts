@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { ApplicationSettings } from "../storage/app.settings";
-import { BluetoothService } from "../bluetooth/bluetooth.service";
+import { BluetoothService } from "../bluetooth-service/bluetooth.service";
+import { BluetoothEventType } from "../bluetooth-service/bluetooth.models";
 import { PeripheralServiceBase } from "./peripheral.service.base";
 import { Observable } from "rxjs";
 import { filter, map } from "rxjs/operators";
-import { BluetoothEventType } from "../bluetooth/bluetooth.models";
 
 @Injectable()
 export class MagReaderService extends PeripheralServiceBase { 

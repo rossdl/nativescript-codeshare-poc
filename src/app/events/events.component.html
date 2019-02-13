@@ -1,0 +1,11 @@
+<h2>Events</h2>
+<button (click)="toggleMode($event)" class="offline" [ngClass]="{'online': !eventService.offline}">{{ eventService.offline ? 'Stored Data' : 'Online Data' }}</button>
+<ul class="items">
+  <li *ngFor="let event of items">
+    <a routerLink="/rates/{{event.EventID}}">
+      <span class="badge">{{event.EventID}}</span> {{event.EventDesc}}
+    </a> 
+  </li>
+</ul>
+<button (click)="onRefresh()">refresh</button>
+<div class="error">{{errorMessage}}</div>

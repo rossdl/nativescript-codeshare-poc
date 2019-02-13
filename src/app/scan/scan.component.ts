@@ -7,11 +7,11 @@ import { MagReaderService } from '../core/peripherals/magreader.service';
 // import { CreditCard } from 'digitaltown-nativescript-card-io/card-io.common';
 
 @Component({
-  selector: 'app-search',
-  templateUrl: './search.component.html',
-  styleUrls: ['./search.component.css']
+  selector: 'app-scan',
+  templateUrl: './scan.component.html',
+  styleUrls: ['./scan.component.css']
 })
-export class SearchComponent implements OnInit {
+export class ScanComponent implements OnInit {
   scanValue: string = "";
 
   constructor(private barcodeScanner: BarcodeScanner, private magReaderService: MagReaderService) { }

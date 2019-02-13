@@ -1,9 +1,0 @@
-<h2>Events</h2>
-<ul class="items">
-  <li *ngFor="let event of items">
-    <a routerLink="/item/{{event.EventID}}">
-      <span class="badge">{{event.EventID}}</span> {{event.EventDesc}}
-    </a> 
-  </li>
-</ul>
-<button (click)="onRefresh()">refresh</button>
